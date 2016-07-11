@@ -5,14 +5,24 @@
     $scope.columns = ['A', 'B', 'C', 'D'];
     $scope.rows = [1, 2, 3, 4];
     $scope.cells = {};
-    
+
     process = function(exp) {
-      return exp.replace(/[A-Z]\d+/, function(ref) {
+      return exp.replace(/[A-Z]\d+/g, function(ref) {
         return 'compute("' + ref + '")';
       })
     }
     $scope.compute = function(cell) {
-      return $parse(process($scope.cells[cell]))($scope);
+      var value = $scope.cells[cell]
+      if (typeof value === 'undefined') {
+        return
+      }
+      var processed = process(value)
+      try {
+        var parsed = $parse(processed)
+        return parsed($scope);
+      } catch (err) {
+        return value
+      }
     };
   }
 </script>
@@ -38,7 +48,7 @@
 
 <style>
   body { font-family: sans-serif; }
-  .output, input { 
+  .output, input {
     font-size: 10pt;
     position: absolute;
     height: 1.2em;
@@ -48,26 +58,26 @@
     padding-left: 4pt;
   }
   input { border: none;}
-  .output { 
-    background: white; 
+  .output {
+    background: white;
     pointer-events: none;
     padding-top: 2pt;
     height: 14pt;
   }
   input:focus + .output { display: none; }
- 
-  table { border-collapse: collapse; } 
+
+  table { border-collapse: collapse; }
   td > div {
     width: 55pt;
     height: 16pt;
-  } 
+  }
   td { border: 1px solid #EEE; }
   .column-label  > td, .row-label {
     text-align: center;
     background: #EEE;
   }
   .row-label { width: 2em; }
- 
+
 </style>
 
 
