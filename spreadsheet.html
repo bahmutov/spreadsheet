@@ -6,10 +6,33 @@
     $scope.rows = [1, 2, 3, 4];
     $scope.cells = {};
 
+    function hasTags(text) {
+      return /</.test(text)
+    }
+
+    function computeReference(ref) {
+      return 'compute("' + ref + '")';
+    }
+
+    function computeReferenceConcat(ref) {
+      return ' + ' + computeReference(ref) + ' + '
+    }
+
+    function tagsToStrings(t) {
+      return '"' + t + '"'
+    }
+
     process = function(exp) {
-      return exp.replace(/[A-Z]\d+/g, function(ref) {
-        return 'compute("' + ref + '")';
-      })
+      var cellPattern = /[A-Z]\d+/g
+      var tagPattern = /<\/?[a-z]+>/g
+
+      if (hasTags(exp)) {
+        var tagsReplace = exp.replace(tagPattern, tagsToStrings)
+        var cellsReplaced = tagsReplace.replace(cellPattern, computeReferenceConcat)
+        return cellsReplaced
+      } else {
+        return exp.replace(cellPattern, computeReference)
+      }
     }
     $scope.compute = function(cell) {
       var value = $scope.cells[cell]
