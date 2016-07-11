@@ -1,10 +1,16 @@
-<script src="lib/angular.js"></script>
-
+<!-- <script src="lib/angular.js"></script> -->
+<script  src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
 <script>
   sheet = function($scope, $parse) {
-    $scope.columns = ['A', 'B', 'C', 'D'];
+    $scope.columns = ['A', 'B', 'html', 'live'];
     $scope.rows = [1, 2, 3, 4];
     $scope.cells = {};
+
+    // test input
+    $scope.cells['A1'] = '1'
+    $scope.cells['B1'] = '2'
+    $scope.cells['A2'] = 'A1+B1'
+    $scope.cells['html1'] = '<b>A1</b> + <i>B1</i> = <b>A2</b>'
 
     function hasTags(text) {
       return /</.test(text)
@@ -15,21 +21,30 @@
     }
 
     function computeReferenceConcat(ref) {
-      return ' + ' + computeReference(ref) + ' + '
+      // removes quotes from ref
+      return '" + ' + computeReference(ref.substr(1, ref.length-2)) + ' + "'
     }
 
     function tagsToStrings(t) {
       return '"' + t + '"'
     }
 
+    function replaceOperator(ref) {
+      var op = ref[2]
+      return '" + " ' + op + ' " + "'
+    }
+
     process = function(exp) {
       var cellPattern = /[A-Z]\d+/g
       var tagPattern = /<\/?[a-z]+>/g
+      var cellBetweenTagsPattern = /"[A-Z]\d+"/g
+      var operatorPattern = /" [\+=] ?"/g
 
       if (hasTags(exp)) {
         var tagsReplace = exp.replace(tagPattern, tagsToStrings)
-        var cellsReplaced = tagsReplace.replace(cellPattern, computeReferenceConcat)
-        return cellsReplaced
+        var cellsReplaced = tagsReplace.replace(cellBetweenTagsPattern, computeReferenceConcat)
+        var plusReplaced = cellsReplaced.replace(operatorPattern, replaceOperator)
+        return plusReplaced
       } else {
         return exp.replace(cellPattern, computeReference)
       }
@@ -72,11 +87,11 @@
 <style>
   body { font-family: sans-serif; }
   .output, input {
-    font-size: 10pt;
+    font-size: 20pt;
     position: absolute;
     height: 1.2em;
-    width: 50pt;
-    height: 16pt;
+    width: 150pt;
+    height: 26pt;
     overflow: hidden;
     padding-left: 4pt;
   }
@@ -85,14 +100,14 @@
     background: white;
     pointer-events: none;
     padding-top: 2pt;
-    height: 14pt;
+    height: 24pt;
   }
   input:focus + .output { display: none; }
 
   table { border-collapse: collapse; }
   td > div {
-    width: 55pt;
-    height: 16pt;
+    width: 155pt;
+    height: 26pt;
   }
   td { border: 1px solid #EEE; }
   .column-label  > td, .row-label {
