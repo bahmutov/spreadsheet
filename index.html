@@ -1,15 +1,16 @@
+<link rel="stylesheet" href="app.css" type="text/css">
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
 <script>
   sheet = function($scope, $parse) {
-    $scope.columns = ['A', 'B', 'html', 'live'];
-    $scope.rows = [1, 2, 3, 4];
+    $scope.columns = ['A', 'B'];
+    $scope.rows = [1, 2];
     $scope.cells = {};
 
     // test input
     $scope.cells['A1'] = '1'
     $scope.cells['B1'] = '2'
     $scope.cells['A2'] = 'A1+B1'
-    $scope.cells['html1'] = '<b>A1</b> + <i>B1</i> = <b>A2</b>'
+    $scope.cells['html'] = '<i>A1</i> + <i>B1</i> = <b>A2</b>'
 
     function hasTags(text) {
       return /</.test(text)
@@ -80,41 +81,15 @@
         </div>
       </td>
     </tr>
+    <tr class="html">
+      <td class="row-label">html</td>
+      <td rowspan="2" class="html">
+        <div>
+          <input ng-model="cells.html"></input>
+          <div ng-bind="compute('html')"
+               class="output html"></div>
+        </div>
+      </td>
+    </tr>
   </table>
 </div>
-
-<style>
-  body { font-family: sans-serif; }
-  .output, input {
-    font-size: 20pt;
-    position: absolute;
-    height: 1.2em;
-    width: 150pt;
-    height: 26pt;
-    overflow: hidden;
-    padding-left: 4pt;
-  }
-  input { border: none;}
-  .output {
-    background: white;
-    pointer-events: none;
-    padding-top: 2pt;
-    height: 24pt;
-  }
-  input:focus + .output { display: none; }
-
-  table { border-collapse: collapse; }
-  td > div {
-    width: 155pt;
-    height: 26pt;
-  }
-  td { border: 1px solid #EEE; }
-  .column-label  > td, .row-label {
-    text-align: center;
-    background: #EEE;
-  }
-  .row-label { width: 2em; }
-
-</style>
-
-
