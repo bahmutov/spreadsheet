@@ -54,11 +54,11 @@
     height: 100pt;
   }
   tr.html {
-    height: 100pt;
+    height: 60pt;
   }
   td.html > div {
     width: 200pt;
-    height: 100pt;
+    height: 60pt;
   }
   .column-label  > td, .row-label {
     text-align: center;
