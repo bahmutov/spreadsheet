@@ -1,32 +1,120 @@
-<html>
-  <head>
-    <script src="lib/angular.js"></script>
-    <script src="lib/d3.v2.js"></script>
-    <script src="lib/hammer.js"></script>
-    <script src="lib/jquery-1.8.0.js"></script>
-    <script src="lib/sylvester.src.js"></script>
-    <script src="lib/underscore.js"></script>
-    <script src="src/core.js"></script>
-    <link rel="stylesheet" href="css/bootstrap.css"></link>
-    <link rel="stylesheet" href="css/bootstrap-responsive.css"></link>
-    <style>
-      input { border: none ! important; }
-    </style>
-  </head>
-  <body ng-app>
-    <div class="container-fluid" ng-controller=sheet>
-      <div class="row">
-        <div class="span8 offset4">
-          <table class="table">
-            <tr ng-repeat="($index, row) in rows">
-              <td><input ng-model="row[0]"></input></td>
-              <td>{{compute($index)}}</td>
-            </tr>
-          </table>
-        </div>
-      </div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
+<script>
+  sheet = function($scope, $parse) {
+    $scope.columns = ['A', 'B', 'html', 'live'];
+    $scope.rows = [1, 2, 3, 4];
+    $scope.cells = {};
 
-    </div>
-  
-  </body>
-</html>
+    // test input
+    $scope.cells['A1'] = '1'
+    $scope.cells['B1'] = '2'
+    $scope.cells['A2'] = 'A1+B1'
+    $scope.cells['html1'] = '<b>A1</b> + <i>B1</i> = <b>A2</b>'
+
+    function hasTags(text) {
+      return /</.test(text)
+    }
+
+    function computeReference(ref) {
+      return 'compute("' + ref + '")';
+    }
+
+    function computeReferenceConcat(ref) {
+      // removes quotes from ref
+      return '" + ' + computeReference(ref.substr(1, ref.length-2)) + ' + "'
+    }
+
+    function tagsToStrings(t) {
+      return '"' + t + '"'
+    }
+
+    function replaceOperator(ref) {
+      var op = ref[2]
+      return '" + " ' + op + ' " + "'
+    }
+
+    process = function(exp) {
+      var cellPattern = /[A-Z]\d+/g
+      var tagPattern = /<\/?[a-z]+>/g
+      var cellBetweenTagsPattern = /"[A-Z]\d+"/g
+      var operatorPattern = /" [\+=] ?"/g
+
+      if (hasTags(exp)) {
+        var tagsReplace = exp.replace(tagPattern, tagsToStrings)
+        var cellsReplaced = tagsReplace.replace(cellBetweenTagsPattern, computeReferenceConcat)
+        var plusReplaced = cellsReplaced.replace(operatorPattern, replaceOperator)
+        return plusReplaced
+      } else {
+        return exp.replace(cellPattern, computeReference)
+      }
+    }
+    $scope.compute = function(cell) {
+      var value = $scope.cells[cell]
+      if (typeof value === 'undefined') {
+        return
+      }
+      var processed = process(value)
+      try {
+        var parsed = $parse(processed)
+        return parsed($scope);
+      } catch (err) {
+        return value
+      }
+    };
+  }
+</script>
+
+<div ng-app ng-controller="sheet">
+  <table>
+    <tr class="column-label">
+      <td></td>
+      <td ng-repeat="column in columns">{{column}}</td>
+    </tr>
+    <tr ng-repeat="row in rows">
+      <td class="row-label">{{row}}</td>
+      <td ng-repeat="column in columns">
+        <div>
+          <input ng-model="cells[column+row]"></input>
+          <div ng-bind="compute(column+row)"
+               class="output"></div>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<style>
+  body { font-family: sans-serif; }
+  .output, input {
+    font-size: 20pt;
+    position: absolute;
+    height: 1.2em;
+    width: 150pt;
+    height: 26pt;
+    overflow: hidden;
+    padding-left: 4pt;
+  }
+  input { border: none;}
+  .output {
+    background: white;
+    pointer-events: none;
+    padding-top: 2pt;
+    height: 24pt;
+  }
+  input:focus + .output { display: none; }
+
+  table { border-collapse: collapse; }
+  td > div {
+    width: 155pt;
+    height: 26pt;
+  }
+  td { border: 1px solid #EEE; }
+  .column-label  > td, .row-label {
+    text-align: center;
+    background: #EEE;
+  }
+  .row-label { width: 2em; }
+
+</style>
+
+
