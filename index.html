@@ -1,15 +1,19 @@
+<link rel="stylesheet" href="app.css" type="text/css">
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-sanitize.js"></script>
 <script>
+  angular.module('app', ['ngSanitize'])
   sheet = function($scope, $parse) {
-    $scope.columns = ['A', 'B', 'html', 'live'];
-    $scope.rows = [1, 2, 3, 4];
+    $scope.columns = ['A', 'B'];
+    $scope.rows = [1, 2];
     $scope.cells = {};
 
     // test input
     $scope.cells['A1'] = '1'
     $scope.cells['B1'] = '2'
     $scope.cells['A2'] = 'A1+B1'
-    $scope.cells['html1'] = '<b>A1</b> + <i>B1</i> = <b>A2</b>'
+    $scope.cells['HTML1'] = '<i>A1</i> + <i>B1</i> = <b>A2</b>'
+    $scope.cells['live'] = 'HTML1'
 
     function hasTags(text) {
       return /</.test(text)
@@ -34,7 +38,7 @@
     }
 
     process = function(exp) {
-      var cellPattern = /[A-Z]\d+/g
+      var cellPattern = /[A-Z]+\d+/g
       var tagPattern = /<\/?[a-z]+>/g
       var cellBetweenTagsPattern = /"[A-Z]\d+"/g
       var operatorPattern = /" [\+=] ?"/g
@@ -64,7 +68,7 @@
   }
 </script>
 
-<div ng-app ng-controller="sheet">
+<div ng-app="app" ng-controller="sheet">
   <table>
     <tr class="column-label">
       <td></td>
@@ -80,41 +84,36 @@
         </div>
       </td>
     </tr>
+    <tr class="html">
+      <td class="row-label">html</td>
+      <td class="html">
+        <div>
+          <input ng-model="cells.HTML1"></input>
+          <div ng-bind="compute('HTML1')"
+               class="output html"></div>
+        </div>
+      </td>
+    </tr>
+    <tr class="html">
+      <td class="row-label">live</td>
+      <td class="html">
+        <div>
+          <input ng-model="cells.live"></input>
+          <div ng-bind-html="compute('live')"
+               class="output html"></div>
+        </div>
+      </td>
+    </tr>
   </table>
 </div>
-
-<style>
-  body { font-family: sans-serif; }
-  .output, input {
-    font-size: 20pt;
-    position: absolute;
-    height: 1.2em;
-    width: 150pt;
-    height: 26pt;
-    overflow: hidden;
-    padding-left: 4pt;
-  }
-  input { border: none;}
-  .output {
-    background: white;
-    pointer-events: none;
-    padding-top: 2pt;
-    height: 24pt;
-  }
-  input:focus + .output { display: none; }
-
-  table { border-collapse: collapse; }
-  td > div {
-    width: 155pt;
-    height: 26pt;
-  }
-  td { border: 1px solid #EEE; }
-  .column-label  > td, .row-label {
-    text-align: center;
-    background: #EEE;
-  }
-  .row-label { width: 2em; }
-
-</style>
-
-
+<center>
+  Reactive web "app" based on spreadsheet in 10LOC using Angular, see
+  <a href="https://github.com/bahmutov/spreadsheet">bahmutov/spreadsheet</a>,
+  based on <a href="http://blog.thomasstreet.com/post/129096073308/building-a-spreadsheet-in-20-minutes-with-angular-js">tutorial</a> by
+  <a href="https://twitter.com/graunked">David Graunke</a>.
+  <p>You can change values in cells and see the live DOM updated below.
+  Each cell is a regular value or expression that refers to other cells.
+  Cell "html" has HTML tags, like <code>b, i</code> while cell
+  "live" is bound using <code>ng-bind-html</code> directive to create
+  live reactive result.</p>
+</center>

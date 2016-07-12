@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="spreadsheet.css" type="text/css">
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
 <script>
   sheet = function($scope, $parse) {
@@ -60,46 +61,3 @@
   The cell with expression should automatically update.
   </p>
 </center>
-
-<style>
-  body {
-    font-family: sans-serif;
-    background-color: white;
-    width: 850px;
-  }
-  .output, input {
-    font-size: 20pt;
-    position: absolute;
-    height: 1.2em;
-    width: 150pt;
-    height: 26pt;
-    overflow: hidden;
-    padding-left: 4pt;
-  }
-  input { border: none;}
-  .output {
-    background: white;
-    pointer-events: none;
-    padding-top: 2pt;
-    height: 24pt;
-  }
-  input:focus + .output { display: none; }
-
-  table {
-    border-collapse: collapse;
-    margin-bottom: 1em;
-  }
-  td > div {
-    width: 155pt;
-    height: 26pt;
-  }
-  td { border: 1px solid #EEE; }
-  .column-label  > td, .row-label {
-    text-align: center;
-    background: #EEE;
-  }
-  .row-label { width: 2em; }
-
-</style>
-
-
