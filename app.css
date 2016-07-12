@@ -1,13 +1,13 @@
   body {
     font-family: sans-serif;
     background-color: white;
-    width: 850px;
+    width: 800px;
   }
   .output, input {
     font-size: 20pt;
     position: absolute;
     height: 1.2em;
-    width: 150pt;
+    width: 250pt;
     height: 26pt;
     overflow: hidden;
     padding-left: 4pt;
@@ -44,20 +44,20 @@
     margin-bottom: 1em;
   }
   td > div {
-    width: 155pt;
+    width: 255pt;
     height: 26pt;
   }
   td {
     border: 1px solid #EEE;
   }
   td.html {
-    height: 100pt;
+    height: 200pt;
   }
   tr.html {
     height: 60pt;
   }
   td.html > div {
-    width: 200pt;
+    width: 300pt;
     height: 60pt;
   }
   .column-label  > td, .row-label {
@@ -66,6 +66,6 @@
   }
   .row-label { width: 2em; }
   .html {
-    width: 200pt !important;
+    width: 300pt !important;
     height: 50pt !important;
   }
