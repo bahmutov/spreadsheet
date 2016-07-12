@@ -4,8 +4,10 @@
       "base": "."
     },
     "src": [
+      "*.css",
       "index.html",
-      "spreadsheet.html"
+      "spreadsheet.html",
+      "README.md"
     ]
   }
 }
