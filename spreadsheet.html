@@ -4,6 +4,9 @@
     $scope.columns = ['A', 'B', 'C', 'D'];
     $scope.rows = [1, 2, 3, 4];
     $scope.cells = {};
+    $scope.cells['A1'] = '10';
+    $scope.cells['B1'] = '32';
+    $scope.cells['C1'] = 'A1 + B1';
 
     function computeReference(ref) {
       return 'compute("' + ref + '")';
