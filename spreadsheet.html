@@ -47,11 +47,22 @@
     </tr>
   </table>
 </div>
+<center>
+  Spreadsheet in 10LOC using Angular, see
+  <a href="https://github.com/bahmutov/spreadsheet">bahmutov/spreadsheet</a>,
+  based on <a href="http://blog.thomasstreet.com/post/129096073308/building-a-spreadsheet-in-20-minutes-with-angular-js">tutorial</a> by
+  <a href="https://twitter.com/graunked">David Graunke</a>
+  <p>Enter some numbers in cells A1 an B1, then an expression
+  in another cell, like <code>A1+B1</code> then update either A1 or B1.
+  The cell with expression should automatically update.
+  </p>
+</center>
 
 <style>
   body {
     font-family: sans-serif;
     background-color: white;
+    width: 850px;
   }
   .output, input {
     font-size: 20pt;
@@ -71,7 +82,10 @@
   }
   input:focus + .output { display: none; }
 
-  table { border-collapse: collapse; }
+  table {
+    border-collapse: collapse;
+    margin-bottom: 1em;
+  }
   td > div {
     width: 155pt;
     height: 26pt;
