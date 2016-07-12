@@ -3,7 +3,8 @@
 Original code based on this [tutorial][tutorial].
 
 First demo that allows expressions (like `A1 + B1`) in
-[spreadsheet.html](spreadsheet.html).
+[spreadsheet.html](spreadsheet.html); you can see it live at
+[glebbahmutov.com/spreadsheet/spreadsheet.html](https://glebbahmutov.com/spreadsheet/spreadsheet.html)
 
 [tutorial]: http://blog.thomasstreet.com/post/129096073308/building-a-spreadsheet-in-20-minutes-with-angular-js
 
