@@ -1,0 +1,25 @@
+{
+  "name": "spreadsheet",
+  "version": "1.0.0",
+  "description": "> spreadsheet",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bahmutov/spreadsheet.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bahmutov/spreadsheet/issues"
+  },
+  "homepage": "https://github.com/bahmutov/spreadsheet#readme",
+  "devDependencies": {
+    "grunt-gh-pages": "^1.1.0",
+    "grunty": "^0.3.0"
+  }
+}
