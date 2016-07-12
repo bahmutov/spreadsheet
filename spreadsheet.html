@@ -1,0 +1,102 @@
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
+<script>
+  sheet = function($scope, $parse) {
+    $scope.columns = ['A', 'B', 'C', 'D'];
+    $scope.rows = [1, 2, 3, 4];
+    $scope.cells = {};
+
+    function computeReference(ref) {
+      return 'compute("' + ref + '")';
+    }
+
+    process = function(exp) {
+      var cellPattern = /[A-Z]\d+/g
+      return exp.replace(cellPattern, computeReference)
+    }
+    $scope.compute = function(cell) {
+      var value = $scope.cells[cell]
+      if (typeof value === 'undefined') {
+        return
+      }
+      var processed = process(value)
+      try {
+        var parsed = $parse(processed)
+        return parsed($scope);
+      } catch (err) {
+        return value
+      }
+    };
+  }
+</script>
+
+<div ng-app ng-controller="sheet">
+  <table>
+    <tr class="column-label">
+      <td></td>
+      <td ng-repeat="column in columns">{{column}}</td>
+    </tr>
+    <tr ng-repeat="row in rows">
+      <td class="row-label">{{row}}</td>
+      <td ng-repeat="column in columns">
+        <div>
+          <input ng-model="cells[column+row]"></input>
+          <div ng-bind="compute(column+row)"
+               class="output"></div>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+<center>
+  Spreadsheet in 10LOC using Angular, see
+  <a href="https://github.com/bahmutov/spreadsheet">bahmutov/spreadsheet</a>,
+  based on <a href="http://blog.thomasstreet.com/post/129096073308/building-a-spreadsheet-in-20-minutes-with-angular-js">tutorial</a> by
+  <a href="https://twitter.com/graunked">David Graunke</a>
+  <p>Enter some numbers in cells A1 an B1, then an expression
+  in another cell, like <code>A1+B1</code> then update either A1 or B1.
+  The cell with expression should automatically update.
+  </p>
+</center>
+
+<style>
+  body {
+    font-family: sans-serif;
+    background-color: white;
+    width: 850px;
+  }
+  .output, input {
+    font-size: 20pt;
+    position: absolute;
+    height: 1.2em;
+    width: 150pt;
+    height: 26pt;
+    overflow: hidden;
+    padding-left: 4pt;
+  }
+  input { border: none;}
+  .output {
+    background: white;
+    pointer-events: none;
+    padding-top: 2pt;
+    height: 24pt;
+  }
+  input:focus + .output { display: none; }
+
+  table {
+    border-collapse: collapse;
+    margin-bottom: 1em;
+  }
+  td > div {
+    width: 155pt;
+    height: 26pt;
+  }
+  td { border: 1px solid #EEE; }
+  .column-label  > td, .row-label {
+    text-align: center;
+    background: #EEE;
+  }
+  .row-label { width: 2em; }
+
+</style>
+
+
